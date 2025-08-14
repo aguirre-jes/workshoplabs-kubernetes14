@@ -1,0 +1,35 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/java
+{
+    "name": "Dev Container Minikube",
+    // Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+    "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+    // For more information about features check: https://github.com/devcontainers/features/tree/main/src/java
+    "features": {
+        "ghcr.io/devcontainers/features/docker-in-docker:2.12.2": {},
+        "ghcr.io/devcontainers/features/kubectl-helm-minikube:1.2.2": {}
+    },
+    // Configure tool-specific properties.
+    "customizations": {
+        // Configure properties specific to VS Code.
+        "vscode": {
+            "settings": {},
+            "extensions": [
+                "streetsidesoftware.code-spell-checker",
+                "adpyke.codesnap",
+                "davidanson.vscode-markdownlint",
+                "compulim.vscode-ipaddress",
+                "github.vscode-github-actions",
+                "redhat.vscode-yaml",
+                "redhat.vscode-xml",
+                "github.copilot"
+            ]
+        }
+    },
+    // Use 'forwardPorts' to make a list of ports inside the container available locally.
+    // "forwardPorts": [],
+    // Use 'postCreateCommand' to run commands after the container is created.
+    // "postCreateCommand": "echo 'Post-create command executed.'"
+    // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+    // "remoteUser": "root"
+}
