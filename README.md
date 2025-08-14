@@ -33,7 +33,116 @@ Para facilitar la experiencia y asegurar la compatibilidad entre usuarios de Win
 - **kubectl-helm-minikube:** Instala las herramientas de Kubernetes (kubectl), Helm y Minikube.
 
 
-## Código fuente de la aplicación demo (Python/Flask)
+
+## Manifiestos de Kubernetes: deployment.yaml y service.yaml
+
+Para desplegar la aplicación en Kubernetes, utilizamos dos archivos de manifiesto YAML:
+
+- **deployment.yaml:** Define cómo se debe ejecutar la aplicación, cuántas réplicas (pods) se desean, qué imagen Docker usar, variables de entorno, probes de salud y la política para siempre descargar la imagen más reciente (`imagePullPolicy: Always`). Esto permite que la aplicación esté disponible en alta disponibilidad y que los cambios de versión sean automáticos.
+- **service.yaml:** Expone la aplicación dentro del clúster y hacia el exterior usando un Service de tipo NodePort. Esto permite acceder a la app desde tu máquina local usando una URL y puerto asignado por Minikube.
+
+---
+
+## Guía paso a paso: Estrategias de despliegue en Kubernetes
+
+### 1. Despliegue inicial
+
+**Aplica los manifiestos:**
+```bash
+kubectl apply -f k8s/deployment.yaml
+kubectl apply -f k8s/service.yaml
+```
+
+**Verifica los pods y su distribución:**
+```bash
+kubectl get pods -o wide
+kubectl get nodes
+```
+Observa que hay 3 pods distribuidos en los 3 nodos del clúster.
+
+**Obtén el NodePort y prueba la app:**
+```bash
+kubectl get service k8s-orchestrator-demo
+minikube service k8s-orchestrator-demo --url
+```
+Accede a la URL mostrada o usa curl para ver la versión y el pod que responde:
+```bash
+curl <URL-QUE-TE-DA-MINIKUBE>
+```
+
+---
+
+### 2. Rolling Update
+
+1. Edita el `k8s/deployment.yaml`:
+	- Cambia la variable de entorno VERSION a la nueva versión.
+2. Aplica el cambio:
+	```bash
+	kubectl apply -f k8s/deployment.yaml
+	```
+3. Observa el rolling update:
+	```bash
+	kubectl rollout status deployment/k8s-orchestrator-demo
+	kubectl get pods -w
+	```
+
+## Validación de la aplicación desde la consola
+
+Como estarás trabajando en un devcontainer, es recomendable validar el funcionamiento de la aplicación usando la terminal y no el navegador. Para esto puedes usar los comandos `watch` y `curl`.
+
+### Obtener la IP y puerto del Service
+
+Primero, obtén la URL del servicio con:
+
+```bash
+minikube service k8s-orchestrator-demo --url
+```
+
+Esto te dará una dirección IP y puerto, por ejemplo: `http://192.168.49.2:32711/`.
+
+### Validar la respuesta de la app
+
+Para ver la respuesta de la app y el pod que responde, ejecuta en la terminal:
+
+```bash
+watch -n 1 curl -s http://192.168.49.2:32711/
+```
+
+Verás una salida similar a:
+
+```bash
+Every 1.0s: curl -s http://192.168.49.2:32711/  aa6805d90aa7: Thu Aug 14 03:34:39 2025
+
+Hello, Kubernetes Folks, this is the final version! Version: 1.2.0 | Host: k8s-orchestrator-demo-55485d6848-czjw7
+```
+
+### Validar el endpoint de salud
+
+Para validar el endpoint de salud (`/health`):
+
+```bash
+watch -n 1 curl -s http://192.168.49.2:32711/health
+```
+
+La salida será:
+
+```
+Every 1.0s: curl -s http://192.168.49.2:32711/health  aa6805d90aa7: Thu Aug 14 03:35:00 2025
+
+OK
+```
+
+> **Importante:** Debes usar la IP y puerto que te da el comando `minikube service ... --url` para que funcione correctamente.
+
+---
+
+### 3. Rollback
+
+Si algo sale mal (por ejemplo, colocas una versión no soportada por el app.py en el deployment), puedes volver a la versión anterior fácilmente:
+```bash
+kubectl rollout undo deployment/k8s-orchestrator-demo
+```
+Esto restaurará la configuración previa y los pods volverán a la versión anterior que funcionaba correctamente.
 
 La aplicación utilizada en este workshop está escrita en Python usando el microframework Flask. Es extremadamente simple y está pensada para que cualquier persona pueda entenderla y modificarla rápidamente.
 
