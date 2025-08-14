@@ -475,6 +475,14 @@ Allí encontrarás una guía paso a paso para desplegar la misma app usando Kube
 
 ---
 
+## 🚀 ¿Quieres aprender más sobre Kubernetes y Cloud Native?
+
+Consulta la sección de recursos y certificaciones recomendadas en:
+
+- [Cursos, certificaciones y recursos de aprendizaje](./APRENDIZAJE.md)
+
+---
+
 ## Limpieza del Workshop: Detener y eliminar recursos
 
 Cuando termines el workshop, puedes limpiar tu entorno siguiendo estos pasos sencillos:
