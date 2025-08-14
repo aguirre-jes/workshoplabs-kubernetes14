@@ -1,5 +1,6 @@
 from flask import Flask
 import os
+import socket
 
 app = Flask(__name__)
 
@@ -7,7 +8,16 @@ VERSION = os.environ.get("VERSION", "v1")
 
 @app.route("/")
 def hello():
-    return f"Hello, Kubernetes Folks, this is a final version! Version: {VERSION}"
+    hostname = socket.gethostname()
+    if VERSION == "1.0.0":
+        msg = "Hello, Kubernetes Folks, this is the initial version!"
+    elif VERSION == "1.1.0":
+        msg = "Hello, Kubernetes Folks, this is the intermediate version!"
+    elif VERSION == "1.2.0":
+        msg = "Hello, Kubernetes Folks, this is the final version!"
+    else:
+        msg = "Hello, Kubernetes Folks, unknown version!"
+    return f"{msg} Version: {VERSION} | Host: {hostname}"
 
 @app.route("/health")
 def health():
