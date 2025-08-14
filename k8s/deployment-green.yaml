@@ -1,17 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: k8s-orchestrator-demo
+  name: k8s-orchestrator-demo-green
 spec:
   replicas: 3
   selector:
     matchLabels:
       app: k8s-orchestrator-demo
+      color: green
   template:
     metadata:
       labels:
         app: k8s-orchestrator-demo
-        color: blue
+        color: green
     spec:
       containers:
         - name: app
@@ -21,16 +22,4 @@ spec:
             - containerPort: 8080
           env:
             - name: VERSION
-              value: "1.2.0"
-          readinessProbe:
-            httpGet:
-              path: /health
-              port: 8080
-            initialDelaySeconds: 2
-            periodSeconds: 5
-          livenessProbe:
-            httpGet:
-              path: /health
-              port: 8080
-            initialDelaySeconds: 5
-            periodSeconds: 10
+              value: "1.5.0"

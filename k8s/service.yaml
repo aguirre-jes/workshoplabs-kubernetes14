@@ -6,6 +6,7 @@ spec:
   type: NodePort
   selector:
     app: k8s-orchestrator-demo
+    color: blue
   ports:
     - protocol: TCP
       port: 80
