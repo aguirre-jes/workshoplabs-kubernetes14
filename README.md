@@ -32,7 +32,52 @@ Para facilitar la experiencia y asegurar la compatibilidad entre usuarios de Win
 - **docker-in-docker:** Permite ejecutar Docker dentro del contenedor, necesario para Minikube.
 - **kubectl-helm-minikube:** Instala las herramientas de Kubernetes (kubectl), Helm y Minikube.
 
-## Minikube: Introducción y Uso
+
+## Código fuente de la aplicación demo (Python/Flask)
+
+La aplicación utilizada en este workshop está escrita en Python usando el microframework Flask. Es extremadamente simple y está pensada para que cualquier persona pueda entenderla y modificarla rápidamente.
+
+### Estructura de archivos
+
+```text
+app/
+	├── app.py
+	├── requirements.txt
+	└── Dockerfile
+```
+
+### Descripción rápida del código
+
+- **app.py:** expone dos endpoints:
+
+	- `/` muestra un mensaje y la versión de la app (definida por la variable de entorno `VERSION`).
+	- `/health` responde "OK" para pruebas de salud.
+
+- **requirements.txt:** solo requiere `flask` como dependencia.
+- **Dockerfile:** usa multi-stage build y ejecuta la app como usuario sin privilegios para máxima seguridad.
+
+### Dependencias
+
+La única dependencia es Flask, definida en `requirements.txt`:
+
+```text
+flask
+```
+
+### Ciclo de vida CI/CD
+
+No es necesario construir ni compilar la imagen Docker en local. Todo el proceso de construcción y publicación de la imagen se realiza automáticamente mediante GitHub Actions:
+
+1. Al hacer push de cambios al repositorio, GitHub Actions construye la imagen Docker y la publica en Docker Hub.
+2. Así, los participantes solo deben actualizar el manifiesto de Kubernetes para desplegar la última versión, sin preocuparse por la construcción manual.
+
+#### Autenticación con Docker Hub
+
+Para que GitHub Actions pueda publicar la imagen, es necesario crear dos secretos en el repositorio:
+- `DOCKERHUB_USERNAME`: tu usuario de Docker Hub.
+- `DOCKERHUB_TOKEN`: un token de acceso generado en Docker Hub.
+
+> **Nota:** No es necesario modificar la imagen base para experimentar con las estrategias de despliegue; la imagen publicada funciona tal cual para todos los ejercicios.
 
 Minikube es una herramienta que permite ejecutar un clúster de Kubernetes localmente, ideal para desarrollo, pruebas y aprendizaje. Facilita la experimentación con recursos y despliegues de Kubernetes sin requerir infraestructura en la nube.
 
@@ -129,3 +174,4 @@ kubectl cluster-info
 ```
 
 Si los nodos aparecen en estado `Ready` y los pods del sistema están en estado `Running` o `Completed`, tu clúster está correctamente configurado y listo para usarse.
+
