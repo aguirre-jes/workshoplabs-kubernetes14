@@ -27,13 +27,25 @@ Espera unos segundos a que los pods de KubeVela estén en estado `Running`:
 kubectl get pods -n vela-system
 ```
 
-
 ## 2. Desplegar la app con KubeVela
 
 Usa la CLI de KubeVela para aplicar el manifiesto:
 
 ```bash
 vela up -f kubevela/vela-app.yaml
+```
+
+Deberas tener una salida asi:
+
+```text
+Applying an application in vela K8s object format...
+✅ App has been deployed 🚀🚀🚀
+    Port forward: vela port-forward k8s-orchestrator-demo-vela
+             SSH: vela exec k8s-orchestrator-demo-vela
+         Logging: vela logs k8s-orchestrator-demo-vela
+      App status: vela status k8s-orchestrator-demo-vela
+        Endpoint: vela status k8s-orchestrator-demo-vela --endpoint
+Application /k8s-orchestrator-demo-vela applied.
 ```
 
 Esto creará automáticamente el Deployment y el Service necesarios, ¡todo desde un solo archivo!
@@ -62,7 +74,7 @@ vela logs k8s-orchestrator-demo-vela --component demo-web
 > Si necesitas eliminar la app:
 
 ```bash
-vela delete k8s-orchestrator-demo-vela
+vela delete k8s-orchestrator-demo-vela -n default
 ```
 
 > Si quieres ver los recursos nativos generados, puedes usar `kubectl get deployment,svc` como referencia.
