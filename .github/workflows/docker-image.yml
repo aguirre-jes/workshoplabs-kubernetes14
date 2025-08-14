@@ -32,11 +32,12 @@ jobs:
           VERSION=$(grep '^VERSION=' ./app/version.properties | cut -d'=' -f2)
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
-      - name: Build and push Docker image
+      - name: Build and push Docker image (multi-arch)
         uses: docker/build-push-action@v6.18.0
         with:
           context: ./app
           push: true
+          platforms: linux/amd64,linux/arm64
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/k8s-orchestrator-demo-python:${{ steps.get_version.outputs.version }}
 
       - name: (Opcional) Scan image with Trivy
