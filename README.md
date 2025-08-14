@@ -118,7 +118,7 @@ nproc
 #### Windows (PowerShell)
 
 - Ver memoria disponible:
-	
+
  ```powershell
 Get-CimInstance Win32_OperatingSystem | Select-Object TotalVisibleMemorySize,FreePhysicalMemory
 ```
@@ -462,6 +462,18 @@ kubectl apply -f k8s/service.yaml
 4. Todo el tráfico irá a los pods de la nueva versión de golpe. Puedes validar con curl y watch como antes.
 
 > **Tip:** Puedes mantener ambos deployments activos para pruebas, y solo cambiar el selector del Service cuando decidas hacer el switch.
+
+---
+
+## BONUS: ¿Quieres experimentar con KubeVela y OAM?
+
+Si te interesa probar una alternativa declarativa y aún más simple para desplegar aplicaciones en Kubernetes, revisa la sección bonus:
+
+- [Despliegue sencillo con KubeVela y OAM (KUBEVELA.md)](./KUBEVELA.md)
+
+Allí encontrarás una guía paso a paso para desplegar la misma app usando KubeVela y el estándar OAM, con un solo manifiesto YAML y comandos simplificados.
+
+---
 
 ## Limpieza del Workshop: Detener y eliminar recursos
 
