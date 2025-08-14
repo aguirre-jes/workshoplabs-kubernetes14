@@ -184,6 +184,109 @@ kubectl cluster-info
 
 Si los nodos aparecen en estado `Ready` y los pods del sistema están en estado `Running` o `Completed`, tu clúster está correctamente configurado y listo para usarse.
 
+---
+
+### Comandos útiles de Kubernetes
+
+A continuación, una guía centralizada de los comandos más utilizados durante el workshop. Puedes consultarla en cualquier momento para operar y validar tu clúster y aplicaciones:
+
+#### Información general del clúster
+
+- Ver nodos:
+
+```bash
+kubectl get nodes
+```
+
+- Ver pods en todos los namespaces:
+
+```bash
+kubectl get pods -A
+```
+
+- Ver servicios:
+
+```bash
+kubectl get svc
+```
+
+- Ver recursos de un tipo específico (por ejemplo, deployments):
+
+```bash
+kubectl get deployments
+```
+
+- Ver detalles de un recurso:
+
+```bash
+kubectl describe pod <nombre-pod>
+kubectl describe svc <nombre-servicio>
+```
+
+#### Aplicar y eliminar manifiestos
+
+- Aplicar un manifiesto:
+
+```bash
+kubectl apply -f <archivo.yaml>
+```
+
+- Eliminar un recurso:
+
+```bash
+kubectl delete -f <archivo.yaml>
+```
+
+#### Logs y depuración
+
+- Ver logs de un pod:
+
+```bash
+kubectl logs <nombre-pod>
+```
+
+- Ver logs en tiempo real:
+
+```bash
+kubectl logs -f <nombre-pod>
+```
+
+- Ejecutar un comando dentro de un pod:
+
+```bash
+kubectl exec -it <nombre-pod> -- /bin/sh
+```
+
+#### Rollout y actualizaciones
+
+- Ver el estado de un deployment:
+
+```bash
+kubectl rollout status deployment/<nombre-deployment>
+```
+
+- Hacer rollback a la versión anterior:
+
+```bash
+kubectl rollout undo deployment/<nombre-deployment>
+```
+
+#### Otros útiles
+
+- Obtener la URL de un servicio NodePort en Minikube:
+
+```bash
+minikube service <nombre-servicio> --url
+```
+
+- Ver recursos en formato YAML:
+
+```bash
+kubectl get pod <nombre-pod> -o yaml
+```
+
+> **Tip:** Puedes usar `kubectl get all` para ver todos los recursos principales en el namespace actual.
+
 ## Manifiestos de Kubernetes: deployment.yaml y service.yaml
 
 Para desplegar la aplicación en Kubernetes, utilizamos dos archivos de manifiesto YAML:
