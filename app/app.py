@@ -7,7 +7,7 @@ VERSION = os.environ.get("VERSION", "v1")
 
 @app.route("/")
 def hello():
-    return f"Hello, Kubernetes Folks! Version: {VERSION}"
+    return f"Hello, Kubernetes Folks, this is a final version! Version: {VERSION}"
 
 @app.route("/health")
 def health():
