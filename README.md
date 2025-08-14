@@ -64,12 +64,24 @@ La única dependencia es Flask, definida en `requirements.txt`:
 flask
 ```
 
-### Ciclo de vida CI/CD
 
-No es necesario construir ni compilar la imagen Docker en local. Todo el proceso de construcción y publicación de la imagen se realiza automáticamente mediante GitHub Actions:
+### Ciclo de vida CI/CD y manejo de versiones
 
-1. Al hacer push de cambios al repositorio, GitHub Actions construye la imagen Docker y la publica en Docker Hub.
-2. Así, los participantes solo deben actualizar el manifiesto de Kubernetes para desplegar la última versión, sin preocuparse por la construcción manual.
+No es necesario construir ni compilar la imagen Docker en local. Todo el proceso de construcción y publicación de la imagen se realiza automáticamente mediante GitHub Actions.
+
+
+#### ¿Cómo funciona el workflow?
+
+Al hacer push de cambios al repositorio, GitHub Actions ejecuta un workflow automatizado que realiza los siguientes pasos:
+
+1. **Checkout del código:** Descarga el código fuente del repositorio para que esté disponible en el runner.
+2. **Configuración de Docker Buildx:** Prepara el entorno para construir imágenes Docker de manera eficiente y multiplataforma.
+3. **Login en Docker Hub:** Utiliza los secretos configurados (`DOCKERHUB_USERNAME` y `DOCKERHUB_TOKEN`) para autenticarse y poder subir imágenes al repositorio de Docker Hub.
+4. **Lectura de la versión:** Lee el valor de la versión desde el archivo `app/version.properties` (por ejemplo, `VERSION=1.0.0`) y lo guarda como una variable de salida para usarlo en los siguientes pasos.
+5. **Construcción y push de la imagen:** Construye la imagen Docker usando el código fuente de la carpeta `app/` y la etiqueta con la versión obtenida. Luego, sube la imagen a Docker Hub con el tag correspondiente (por ejemplo, `:1.0.0`).
+6. **(Opcional) Escaneo de seguridad:** Utiliza Trivy para analizar la imagen publicada y detectar posibles vulnerabilidades.
+
+> **Importante:** Así, los participantes solo deben actualizar el archivo `version.properties` para definir una nueva versión antes de hacer push, y luego usar esa versión en los manifiestos de Kubernetes. No es necesario construir la imagen manualmente ni preocuparse por el versionado de la imagen, ya que todo el proceso es automático y transparente.
 
 #### Autenticación con Docker Hub
 
@@ -77,7 +89,7 @@ Para que GitHub Actions pueda publicar la imagen, es necesario crear dos secreto
 - `DOCKERHUB_USERNAME`: tu usuario de Docker Hub.
 - `DOCKERHUB_TOKEN`: un token de acceso generado en Docker Hub.
 
-> **Nota:** No es necesario modificar la imagen base para experimentar con las estrategias de despliegue; la imagen publicada funciona tal cual para todos los ejercicios.
+> **Nota:** No es necesario modificar la imagen base para experimentar con las estrategias de despliegue; la imagen publicada funciona tal cual para todos los ejercicios. El manejo de versiones facilita la gestión de despliegues y pruebas en Kubernetes.
 
 Minikube es una herramienta que permite ejecutar un clúster de Kubernetes localmente, ideal para desarrollo, pruebas y aprendizaje. Facilita la experimentación con recursos y despliegues de Kubernetes sin requerir infraestructura en la nube.
 
